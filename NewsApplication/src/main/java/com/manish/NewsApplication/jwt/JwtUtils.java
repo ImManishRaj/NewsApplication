@@ -60,7 +60,6 @@ public User parseToken(String token)
     user.setEmail(claims.get("email",String.class));
     user.setPhone(claims.get("phone", String.class));
     return user;
-
 }
 
 
@@ -90,6 +89,11 @@ public User parseToken(String token)
         }
         return false;
     }
+/*
+    public static String getUserEmailFromJwtToken(String token)
+    {
+
+    }*/
     private Key key() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);

@@ -15,16 +15,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-
 public class AuthTokenFilter extends OncePerRequestFilter {
-
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
     private JwtUtils jwtUtils;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -36,14 +33,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
-                logger.debug("Roles from JWT : {}", (Throwable) userDetails.getAuthorities());
+
+                // Updated logging
+                logger.debug("Roles from JWT : {}");
 
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         } catch (Exception e) {
-            logger.error("Cannot set User Authentication: {}",e);
+            // Updated exception logging
+            logger.error("Cannot set User Authentication: {}");
         }
 
         filterChain.doFilter(request, response);
@@ -52,5 +52,4 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private String parseJwt(HttpServletRequest request) {
         return jwtUtils.getJwtFromHeader(request);
     }
-    }
-
+}
